@@ -1,12 +1,24 @@
 import express from "express";
 import { serverPort } from "./config";
+import { getLatLonForCity } from "./clients/geoApi";
+import { getWeatherForLatLon } from "./clients/dataApi";
 
 const app = express();
 
 app.use(express.json())
 
-app.use("/", (req, res) => {
-    res.json("Server is running")
+app.get("/", async (req, res) => {
+    console.log(req.query)
+    if (!req.query || !req.query.city) {
+        return res.status(400).json("Please provide the name of a city")
+    }
+    const optionalCode = req.query.code ? req.query.code.toString() : undefined;
+    const geoCodeRes = await getLatLonForCity(req.query.city.toString(), optionalCode);
+    if (!geoCodeRes) {
+        return res.status(400).json("Could not retrieve requested city")
+    }
+    const weatherDataRes = await getWeatherForLatLon(geoCodeRes.lat, geoCodeRes.lon)
+    res.json(weatherDataRes);
 });
 
 app.listen(serverPort, () => {
