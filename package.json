@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "dev": "tsx watch -r dotenv/config ./src/index.ts",
+    "dev": "tsx watch -r dotenv/config ./src/server.ts",
     "type-check": "tsc --noEmit"
   },
   "repository": {
