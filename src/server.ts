@@ -5,10 +5,9 @@ import { getWeatherForLatLon } from "./clients/dataApi";
 
 const app = express();
 
-app.use(express.json())
+app.use(express.json());
 
 app.get("/", async (req, res) => {
-    console.log(req.query)
     if (!req.query || !req.query.city) {
         return res.status(400).json("Please provide the name of a city")
     }
